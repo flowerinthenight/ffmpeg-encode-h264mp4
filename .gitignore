@@ -1,4 +1,7 @@
-.vs
+.vs/
+ipch/
+obj/
 *.vcxproj.user
 *.opendb
 *.db
+*.pdb
