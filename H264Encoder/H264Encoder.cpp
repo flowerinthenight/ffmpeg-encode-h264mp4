@@ -41,7 +41,6 @@ namespace NSH264Encoder {
         SetupCodec(m_filename, libffmpeg::AV_CODEC_ID_H264);
     }
 
-
     void FfmpegH264Encoder::WriteFrame(char *frame)
     {
         /* frame should be RGB24 */
