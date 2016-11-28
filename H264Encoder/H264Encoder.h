@@ -44,8 +44,8 @@ namespace NSH264Encoder {
     };
 
     // Managed class for our CS code.
-	public ref class H264Encoder : public IDisposable
-	{
+    public ref class H264Encoder : public IDisposable
+    {
     protected:
         /// <summary>
         /// Object's finalizer.
@@ -71,5 +71,5 @@ namespace NSH264Encoder {
     private:
         bool disposed;
         FfmpegH264Encoder *enc;
-	};
+    };
 }
