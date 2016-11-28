@@ -21,11 +21,12 @@ namespace H264MP4Encode
 
         private void button1_Click(object sender, EventArgs e)
         {
-            H264Encoder enc = new H264Encoder();
-            enc.SetupEncode(@"c:\test.mp4");
-
             int width = 640;
             int height = 480;
+            int fps = 30;
+            H264Encoder enc = new H264Encoder();
+            enc.SetupEncode(@"c:\users\idril\downloads\encoded.mp4", width, height, fps);
+
             Bitmap image = new Bitmap(width, height);
             Graphics g = Graphics.FromImage(image);
             g.FillRectangle(Brushes.Black, 0, 0, width, height);

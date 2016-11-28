@@ -64,8 +64,8 @@ namespace NSH264Encoder {
             disposed = true;
         }
 
-        void SetupEncode(String ^fileName);
-        void WriteFrame(array<System::Byte>^ rgb24);
+        void SetupEncode(String ^fileName, int w, int h, int fps);
+        void WriteFrame(array<System::Byte>^ frameRGB24);
         void CloseEncode();
 
     private:

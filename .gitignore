@@ -1,5 +1,7 @@
 .vs/
+x64/
 ipch/
+H264Encoder/x64/
 obj/
 *.vcxproj.user
 *.opendb

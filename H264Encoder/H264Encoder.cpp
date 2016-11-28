@@ -28,7 +28,7 @@ namespace NSH264Encoder {
     void FfmpegH264Encoder::SetupVideo(char *fname, int w, int h, int fps, int gob, int bps)
     {
         /* copy filename to local string */
-        sprintf(m_filename, fname);
+        sprintf_s(m_filename, 1024, fname);
 
         /* set movie parameters */
         m_MP4MOV_WIDTH = w;
@@ -312,22 +312,23 @@ namespace NSH264Encoder {
         EventUnregisterJyTrace();
     }
 
-    void H264Encoder::SetupEncode(String ^fileName)
+    void H264Encoder::SetupEncode(String ^fileName, int w, int h, int fps)
     {
         pin_ptr<const wchar_t> fn = PtrToStringChars(fileName);
+        size_t n;
         char mbfn[1024];
-        wcstombs(mbfn, fn, 1024);
+        wcstombs_s(&n, mbfn, fn, 1024);
 
         if (!enc) {
             enc = new FfmpegH264Encoder();
-            enc->SetupVideo(mbfn, 640, 480, 30, 10, 40000000);
+            enc->SetupVideo(mbfn, w, h, fps, 10, 40000000);
             EventWriteSimple(MD, FL, FN, L"Trace", L"Setup test.mp4");
         }
     }
 
-    void H264Encoder::WriteFrame(array<System::Byte>^ rgb24)
+    void H264Encoder::WriteFrame(array<System::Byte>^ frameRGB24)
     {
-        pin_ptr<System::Byte> p = &rgb24[0];
+        pin_ptr<System::Byte> p = &frameRGB24[0];
         unsigned char* pby = p;
         char* pch = reinterpret_cast<char*>(pby);
         enc->WriteFrame(pch);
