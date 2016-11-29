@@ -106,15 +106,11 @@ namespace NSH264Encoder {
 
             /* find the encoder */
             m_video_codec = avcodec_find_encoder(m_fmt->video_codec);
-            if (!(m_video_codec)) {
-                return;
-            }
+            if (!(m_video_codec)) { return; }
 
             /* create new video stream */
             st = avformat_new_stream(m_oc, m_video_codec);
-            if (!st) {
-                return;
-            }
+            if (!st) { return; }
 
             st->id = m_oc->nb_streams - 1;
 
@@ -134,8 +130,9 @@ namespace NSH264Encoder {
             m_c->pix_fmt = libffmpeg::AV_PIX_FMT_YUV420P;
              
             /* some formats want stream headers to be separate */
-            if (m_oc->oformat->flags & AVFMT_GLOBALHEADER)
+            if (m_oc->oformat->flags & AVFMT_GLOBALHEADER) {
                 m_c->flags |= CODEC_FLAG_GLOBAL_HEADER;
+            }
 
             /* set our video stream pointer */
             m_video_st = st;
@@ -151,27 +148,19 @@ namespace NSH264Encoder {
 
             /* open the codec */
             ret = avcodec_open2(c, m_video_codec, NULL);
-            if (ret < 0) {
-                return;
-            }
+            if (ret < 0) { return; }
 
             /* allocate and init a re-usable frame */
             m_frame = libffmpeg::av_frame_alloc();
-            if (!m_frame) {
-                return;
-            }
+            if (!m_frame) { return; }
 
             /* allocate the encoded raw picture */
             ret = avpicture_alloc(&m_dst_picture, c->pix_fmt, c->width, c->height);
-            if (ret < 0) {
-                return;
-            }
+            if (ret < 0) { return; }
 
             /* allocate RGB frame that we can pass to the YUV frame */
             ret = avpicture_alloc(&m_src_picture, libffmpeg::AV_PIX_FMT_RGB24, c->width, c->height);
-            if (ret < 0) {
-                return;
-            }
+            if (ret < 0) { return; }
 
             /* copy data and linesize picture pointers to frame */
             *((libffmpeg::AVPicture *)m_frame) = m_dst_picture;
@@ -183,21 +172,17 @@ namespace NSH264Encoder {
         /* open the output file, if needed */
         if (!(m_fmt->flags & AVFMT_NOFILE)) {
             ret = avio_open(&m_oc->pb, fname, AVIO_FLAG_WRITE);
-            if (ret < 0) {
-                return;
-            }
+            if (ret < 0) { return; }
         }
 
         /* write the stream header, if any */
         ret = avformat_write_header(m_oc, NULL);
-
-        if (ret < 0) {
-            return;
-        }
+        if (ret < 0) { return; }
 
         /* set frame count to zero */
-        if (m_frame)
+        if (m_frame) {
             m_frame->pts = 0;
+        }
 
         m_setup = true;
     }
@@ -226,9 +211,7 @@ namespace NSH264Encoder {
                 m_sws_flags,
                 NULL, NULL, NULL);
 
-            if (!sws_ctx) {
-                return;
-            }
+            if (!sws_ctx) { return; }
         }
 
         /* convert RGB frame (m_src_picture) to and YUV frame (m_dst_picture) */
@@ -249,9 +232,7 @@ namespace NSH264Encoder {
 
         /* encode the frame */
         ret = avcodec_encode_video2(c, &pkt, m_frame, &got_packet);
-        if (ret < 0) {
-            return;
-        }
+        if (ret < 0) { return; }
 
         /* if size of encoded frame is zero, it means the image was buffered */
         if (!ret && got_packet && pkt.size) {
@@ -261,9 +242,7 @@ namespace NSH264Encoder {
             ret = av_interleaved_write_frame(m_oc, &pkt);
 
             /* if non-zero then it means that there was something wrong writing the frame to the file */
-            if (ret != 0) {
-                return;
-            }
+            if (ret != 0) { return; }
         } else {
             ret = 0;
         }
