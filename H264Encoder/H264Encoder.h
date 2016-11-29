@@ -26,7 +26,7 @@ namespace NSH264Encoder {
         int m_frame_count;
         int m_MP4MOV_WIDTH;
         int m_MP4MOV_HEIGHT;
-        bool m_Mutex;
+        bool m_setup;
         double m_video_time;
         char *m_filename;
 

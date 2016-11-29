@@ -17,7 +17,7 @@ namespace NSH264Encoder {
     FfmpegH264Encoder::FfmpegH264Encoder()
     {
         m_filename = new char[1024];
-        m_Mutex = false;
+        m_setup = false;
     }
 
     FfmpegH264Encoder::~FfmpegH264Encoder()
@@ -65,7 +65,7 @@ namespace NSH264Encoder {
 
     void FfmpegH264Encoder::SetupCodec(const char *fname, int codecId)
     {
-        if (m_Mutex) { return; }
+        if (m_setup) { return; }
 
         int ret;
         m_sws_flags = SWS_BICUBIC;
@@ -199,13 +199,13 @@ namespace NSH264Encoder {
         if (m_frame)
             m_frame->pts = 0;
 
-        m_Mutex = true;
+        m_setup = true;
     }
 
     void FfmpegH264Encoder::WriteFrame(void)
     {
         /* if video is not initalised then don't write frame */
-        if (!m_Mutex) { return; }
+        if (!m_setup) { return; }
 
         /* calculate video time */
         m_video_time = m_video_st ? m_video_st->pts.val * av_q2d(m_video_st->time_base) : 0.0;
@@ -276,7 +276,7 @@ namespace NSH264Encoder {
     void FfmpegH264Encoder::CloseCodec(void)
     {
         /* if video is not initalised then don't close frame */
-        if (!m_Mutex) { return; }
+        if (!m_setup) { return; }
 
         /* write trailing bits */
         av_write_trailer(m_oc);
@@ -296,7 +296,7 @@ namespace NSH264Encoder {
         avformat_free_context(m_oc);
 
         /* set open flag clear */
-        m_Mutex = false;
+        m_setup = false;
     }
 
     // Managed class implementation for our CS code.
