@@ -25,7 +25,7 @@ namespace NSH264Encoder {
         delete[] m_filename;
     }
 
-    void FfmpegH264Encoder::SetupVideo(char *fname, int w, int h, int fps, int gob, int bps)
+    void FfmpegH264Encoder::SetupVideo(char *fname, int w, int h, int fps, int gop, int bps)
     {
         /* copy filename to local string */
         sprintf_s(m_filename, 1024, fname);
@@ -34,7 +34,7 @@ namespace NSH264Encoder {
         m_MP4MOV_WIDTH = w;
         m_MP4MOV_HEIGHT = h;
         m_MP4MOV_FPS = fps;
-        m_MP4MOV_GOB = gob;
+        m_MP4MOV_GOP = gop;
         m_MP4MOV_BPS = bps;
 
         /* pass parameters to setup codec as H264 file */
@@ -125,7 +125,7 @@ namespace NSH264Encoder {
             m_c->height = m_MP4MOV_HEIGHT;
             m_c->time_base.den = m_MP4MOV_FPS;
             m_c->time_base.num = 1;
-            m_c->gop_size = m_MP4MOV_GOB;
+            m_c->gop_size = m_MP4MOV_GOP;
             /* do not change this, H264 needs YUV format not RGB */
             m_c->pix_fmt = libffmpeg::AV_PIX_FMT_YUV420P;
              

@@ -14,14 +14,14 @@ namespace NSH264Encoder {
         FfmpegH264Encoder();
         ~FfmpegH264Encoder();
 
-        void SetupVideo(char *fname, int w, int h, int fps, int gob, int bps);
+        void SetupVideo(char *fname, int w, int h, int fps, int gop, int bps);
         void WriteFrame(char *frame);
         void CloseVideo(void);
 
     private:
         int m_sws_flags;
         int m_MP4MOV_FPS;
-        int m_MP4MOV_GOB;
+        int m_MP4MOV_GOP;
         int m_MP4MOV_BPS;
         int m_frame_count;
         int m_MP4MOV_WIDTH;
